@@ -1,0 +1,18 @@
+#!/bin/bash
+red=`tput setaf 1`
+blue=`tput setaf 4`
+reset=`tput sgr0`
+
+RESOURCEGROUP='test_solid'
+
+while getopts 'r:' flag; do
+  case "${flag}" in
+    r) RESOURCEGROUP="${OPTARG}" ;;
+    *) echo "Unexpected option ${flag}" ;;
+  esac
+done
+
+echo "${blue}[K8s Parameters]${reset}"
+echo "Resource Group: $RESOURCEGROUP${red}"
+az group delete --name $RESOURCEGROUP \
+                --no-wait

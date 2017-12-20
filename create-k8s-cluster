@@ -1,0 +1,41 @@
+#!/bin/bash
+green=`tput setaf 2`;
+blue=`tput setaf 4`;
+reset=`tput sgr0`;
+
+RESOURCEGROUP='test_solid';
+LOCATION='eastus';
+CLUSTERNAME='solidcluster';
+NODECOUNT=1;
+
+while getopts 'r:l:c:n:' flag; do
+  case "${flag}" in
+    r) RESOURCEGROUP="${OPTARG}" ;;
+    l) LOCATION="${OPTARG}" ;;
+    c) CLUSTERNAME="${OPTARG}" ;;
+    n) NODECOUNT="${OPTARG}" ;;
+    *) echo "Unexpected option ${flag}" ;;
+  esac
+done
+
+echo "${blue}[K8s Parameters]${reset}";
+echo "Resource Group: $RESOURCEGROUP";
+echo "Location: $LOCATION";
+echo "Cluster Name: $CLUSTERNAME";
+
+echo "${green}[K8s Cluster]${reset} Creating Resource Group...";
+az group create --name $RESOURCEGROUP \
+                --location $LOCATION;
+
+echo "${green}[K8s Cluster]${reset} Finished.";
+echo "${green}[K8s Cluster]${reset} Adding K8s to the recently created Resource Group.";
+az aks create --resource-group $RESOURCEGROUP \
+              --name $CLUSTERNAME \
+              --node-count $NODECOUNT \
+              --generate-ssh-keys;
+
+echo "${green}[K8s Cluster]${reset} Getting the credentials for the K8s kubectl";
+az aks get-credentials --resource-group $RESOURCEGROUP \
+                       --name $CLUSTERNAME
+
+echo "${green}[K8s Cluster]${reset} K8s Cluster successfully created.";

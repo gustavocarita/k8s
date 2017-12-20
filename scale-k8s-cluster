@@ -1,0 +1,22 @@
+#!/bin/bash
+green=`tput setaf 2`;
+blue=`tput setaf 4`;
+reset=`tput sgr0`;
+
+RESOURCEGROUP='test_solid';
+CLUSTERNAME='solidcluster';
+NODECOUNT=1;
+
+while getopts 'r:c:n:' flag; do
+  case "${flag}" in
+    r) RESOURCEGROUP="${OPTARG}" ;;
+    c) CLUSTERNAME="${OPTARG}" ;;
+    n) NODECOUNT="${OPTARG}" ;;
+    *) echo "Unexpected option ${flag}" ;;
+  esac
+done
+
+az aks scale --resource-group=$RESOURCEGROUP \
+             --name=$CLUSTERNAME \
+             --node-count $NODECOUNT
+

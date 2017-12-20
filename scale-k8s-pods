@@ -1,0 +1,17 @@
+#!/bin/bash
+green=`tput setaf 2`;
+blue=`tput setaf 4`;
+reset=`tput sgr0`;
+
+REPLICACOUNT=1;
+PODNAME='';
+
+while getopts 'n:p:' flag; do
+  case "${flag}" in
+    n) REPLICACOUNT="${OPTARG}" ;;
+    p) PODNAME="${OPTARG}" ;;
+    *) echo "Unexpected option ${flag}" ;;
+  esac
+done
+
+kubectl scale --replicas=$REPLICACOUNT deployment/$PODNAME

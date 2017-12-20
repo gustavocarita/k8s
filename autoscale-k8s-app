@@ -1,0 +1,23 @@
+#!/bin/bash
+green=`tput setaf 2`;
+blue=`tput setaf 4`;
+reset=`tput sgr0`;
+
+CPUPERCENT=50;
+MAXPODS=1;
+MINPODS=1;
+APPNAME='';
+
+while getopts 'c:m:n:a:' flag; do
+  case "${flag}" in
+    c) CPUPERCENT="${OPTARG}" ;;
+    m) MAXPODS="${OPTARG}" ;;
+    n) MINPODS="${OPTARG}" ;;
+    a) APPNAME="${OPTARG}" ;;
+    *) echo "Unexpected option ${flag}" ;;
+  esac
+done
+
+kubectl autoscale deployment $APPNAME --cpu-percent=$CPUPERCENT \
+                                      --min=$MINPODS \
+                                      --max=$MAXPODS
