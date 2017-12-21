@@ -17,4 +17,9 @@ data:
     {{- range $index, $topping := .Values.pizzaToppings }}
     {{ $index }}: {{ $topping }}
     {{- end }}
-{{ include "mychart_app" . | indent 4}}
+{{ include "mychart_app" . | indent 4 }}
+  {{- $files := .Files }}
+  {{- range tuple "config1.toml" "config2.toml" "config3.toml" }}
+  {{ . }}: |-
+    {{ $files.Get . }}
+  {{- end }}
