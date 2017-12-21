@@ -7,17 +7,13 @@ data:
   myvalue: "Hello World"
   {{- $relname := .Release.Name -}}
   {{- range $key, $val := .Values.favorite }}
-  {{ $key }}: {{$val | quote }}
-  {{- if eq $val "coffee" }}
-  mug: true
+  {{ $key }}: {{ $val | quote }}
   {{- end }}
-  {{- end}}
   release: {{ $relname }}
   toppings: |-
     {{- range $index, $topping := .Values.pizzaToppings }}
     {{ $index }}: {{ $topping }}
     {{- end }}
-{{ include "mychart_app" . | indent 4 }}
   {{- $files := .Files }}
   {{- range tuple "config1.toml" "config2.toml" "config3.toml" }}
   {{ . }}: |-
